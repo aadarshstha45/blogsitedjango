@@ -1,0 +1,40 @@
+<style>
+    .main-header{
+      margin-left: 0px !important;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+    <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                
+                <li class="nav-item d-none d-sm-inline-block">
+                <a href="{% url 'post:postlist' %}" class="nav-link">Home</a>
+                </li>
+                
+                {% if request.user.is_authenticated%}
+
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{% url 'post:postadd' %}" class="nav-link">Add Post</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{% url 'post:mypost' %}" class="nav-link">My Posts</a>
+                </li>
+                <li>
+                    <a href="{% url 'user:logout'%}" class="nav-link">Log Out</a>
+                </li>
+
+                {% endif %}
+                {% if not request.user.is_authenticated%}
+
+                <li>
+                    <a href="{% url 'user:login'%}" class="nav-link">Log In</a>
+                </li>
+                <li>
+                    <a href="{% url 'user:register' %}" class="nav-link">Sign Up</a>
+                </li>
+                
+                {% endif %}
+            </ul>
+    </div>
+</nav> 
+    

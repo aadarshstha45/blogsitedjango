@@ -1,0 +1,24 @@
+{% extends 'base_site.html' %}
+
+
+{% block maincontent %}
+<form method="post" action="" enctype="multipart/form-data"> {% csrf_token%}
+   <!-- {{ form.as_p }} -->
+   {% for field in form %}
+        <div class="form-group" >
+            {{field.label_tag}}
+            {{field}}
+            <span class="text text-danger">
+                {{field.errors}}
+            </span>
+        </div>
+    
+   {% endfor %}
+   <div class="form-group">
+    <label>Author</label>
+   <input type="text" hidden value={{request.user}} >
+
+</div>
+
+   <input type="submit" value="Add" class="btn btn-primary">
+{% endblock maincontent %}

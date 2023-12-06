@@ -1,0 +1,90 @@
+
+
+{% extends 'base_site.html' %}
+
+{% block maincontent %} 
+
+<head>
+  <h2>Blogs</h2>
+</head>
+<div class="container">
+    <div class="row col-6  d-flex">
+            
+
+        {% for post in posts%}
+      
+        <div class="col-xs-8 col-md-3 table mt-4 card">
+        <h4>{{post.author}}</h4>
+        {% if post.image %}
+        <a href="{% url 'post:imgview' post.id%}"> <img src="{{post.image.url}}" class="card-img-top" alt="" />
+        </a>
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{post.title}}</h5>
+          <p class="card-text">
+           {{post.body}}
+          </p>
+
+    {% if post.author == request.user %}
+   
+      <a class="btn btn-secondary btn-sm" href="{% url 'post:postedit' post.id%}">Edit</a>
+      <button data-postid = "{{post.id}}" class = "btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
+     
+      {% endif %}
+    </div>
+   </div>
+
+      {% endfor %}
+   
+    </div>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Task</h1>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+           Are You Sure?
+           <form id="delete-form" method="post" action="{% url 'post:postdelete' %}">{%csrf_token%}
+                   <input type="hidden" name="postid" id="_postid" />
+           </form>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+         <button type="button" class="btn btn-danger btn-md" id="delete-button" >Yes</button>
+       </div>
+     </div>
+   </div>
+ </div>
+{% endblock maincontent %}
+{% block script%}
+{{ block.super }}
+<script type="text/javascript">
+   $(document).ready(function(){
+       $.ajax({
+           url:'/demo-for-ajax/',
+           type:'GET',
+           dataType: 'json',
+           success: function(res){
+               console.log(res);
+           },
+           error: function(res) {
+               console.log(res);
+           }
+       })
+       let modal = document.getElementById("exampleModal");
+       modal.addEventListener("show.bs.modal",function(evt){
+           let btn = evt.relatedTarget;
+           let postid = btn.dataset.postid;
+           $("#_postid").val(postid);
+       });
+
+       $("#delete-button").click(function(){
+           $("#delete-form").submit();
+       });
+   });
+</script>
+{% endblock script %}
